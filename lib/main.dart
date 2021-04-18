@@ -75,12 +75,14 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 //The user picked true.
                 setState(() {
+                  questionNumber++;
                   scoreKeeper.add(
                       Icon(
                     Icons.check,
                     color: Colors.green,
                   ));
                 });
+                print(questionNumber);
               },
             ),
           ),
@@ -99,6 +101,15 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
+                setState(() {
+                  questionNumber++;
+                  scoreKeeper.add(
+                      Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ));
+                });
+                print(questionNumber);
               },
             ),
           ),
