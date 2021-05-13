@@ -28,8 +28,32 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-
   List<Icon> scoreKeeper = [];
+
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAns = quizBrain.getQuestionAnswer();
+
+    setState(() { // To make scoreKeeper as updated and render UI
+      print(scoreKeeper.length);
+      if (scoreKeeper.length < 13) {
+        if (userPickedAnswer == correctAns) {
+          print("User got it right");
+          scoreKeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+        } else {
+          print("User got it wrong");
+          scoreKeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+        }
+      }
+      
+      quizBrain.nextQuestion();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +67,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizBrain.getQuestionText() ,
+                quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -68,20 +92,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
-                bool correctAns = quizBrain.getQuestionAnswer();
-                if (correctAns == true)
-                  print("User got it right");
-                else
-                  print("User got it wrong");
-
-                setState(() {
-                  quizBrain.nextQuestion();
-                  scoreKeeper.add(
-                      Icon(
-                    Icons.check,
-                    color: Colors.green,
-                  ));
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -100,28 +111,13 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                bool correctAns = quizBrain.getQuestionAnswer();
-                if (correctAns == false)
-                  print("User got it right");
-                else
-                  print("User got it wrong");
-
-                setState(() {
-                  quizBrain.nextQuestion();
-                  scoreKeeper.add(
-                      Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ));
-                });
+                checkAnswer(false);
               },
             ),
           ),
         ),
         //TODO: Add a Row here as your score keeper
-        Row(
-            children: scoreKeeper
-        )
+        Row(children: scoreKeeper)
       ],
     );
   }
